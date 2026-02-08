@@ -8,7 +8,7 @@ const TOPIC_CONTEXTS: Record<SectionTopic, string> = {
   'propositions': "Suggère des optimisations stratégiques, budgétaires ou opérationnelles pour maximiser l'impact social et l'efficience."
 };
 
-const DOC_CONTEXTS: Record<DocumentId, string> = {
+const DOC_CONTEXTS: Record<string, string> = {
   'sphinx': "Le projet concerne un cabinet de conseil stratégique au Cameroun (SPHINX Consulting).",
   'echo-pediatrie': "Le projet concerne l'intégration de l'échographie clinique aux urgences pédiatriques à Douala (Écho-Pédiatrie)."
 };
@@ -39,9 +39,10 @@ export const generateSpeech = async (text: string): Promise<AudioBuffer | null> 
 
   const ai = new GoogleGenAI({ apiKey });
   try {
+    // Augmentation de la limite à 5000 caractères pour couvrir tout le texte
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash-preview-tts",
-      contents: [{ parts: [{ text: `Lis ce rapport d'audit avec une voix professionnelle et assurée : ${text.substring(0, 1000)}` }] }],
+      contents: [{ parts: [{ text: `Lis l'intégralité de ce rapport d'audit avec une voix posée, professionnelle et convaincante : ${text.substring(0, 5000)}` }] }],
       config: {
         responseModalities: [Modality.AUDIO],
         speechConfig: {

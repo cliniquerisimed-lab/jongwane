@@ -15,7 +15,6 @@
     }
     body {
       font-family: 'Outfit', sans-serif;
-      /* Arrière-plan blanc dégradé premium */
       background: radial-gradient(circle at 50% 0%, #ffffff 0%, #fcfcfc 40%, #f5f7fa 100%);
       color: var(--navy);
       margin: 0;
@@ -64,6 +63,16 @@
       .no-print { display: none !important; }
       body { background: white !important; }
     }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #002147;
+      border-radius: 10px;
+    }
   </style>
 <script type="importmap">
 {
@@ -71,7 +80,9 @@
     "@google/genai": "https://esm.sh/@google/genai@^1.40.0",
     "react/": "https://esm.sh/react@^19.2.4/",
     "react": "https://esm.sh/react@^19.2.4",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.4/"
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "mammoth": "https://esm.sh/mammoth@1.6.0",
+    "pdfjs-dist": "https://esm.sh/pdfjs-dist@4.0.379"
   }
 }
 </script>

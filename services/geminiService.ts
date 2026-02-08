@@ -41,7 +41,14 @@ export const generateSpeech = async (text: string): Promise<AudioBuffer | null> 
   try {
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash-preview-tts",
-      contents: [{ parts: [{ text: `Lis l'intégralité de ce rapport d'audit avec une voix posée, professionnelle et convaincante : ${text.substring(0, 5000)}` }] }],
+      contents: [{ 
+        parts: [{ 
+          text: `Lis l'intégralité de ce diagnostic d'audit avec une voix calme, posée et extrêmement professionnelle. 
+          CONSIGNE DE DÉBIT : MAINTIENS UNE VITESSE DE LECTURE STRICTEMENT STABLE, CONSTANTE ET MODÉRÉE DU DÉBUT À LA FIN. 
+          N'accélère jamais le rythme. 
+          Texte à lire : ${text.substring(0, 5000)}` 
+        }] 
+      }],
       config: {
         responseModalities: [Modality.AUDIO],
         speechConfig: {
@@ -83,16 +90,17 @@ export const askGeminiExpert = async (
 
   const generationConfig = {
     systemInstruction: `Tu es un Auditeur Expert International et Consultant Senior au Cameroun. 
-    EXPERTISE : Stratégie d'entreprise (OHADA, marché local) et Projets de Santé Publique (MINSANTE, PNDS, POCUS).
-    MISSION : Analyser, critiquer de manière constructive et apporter des solutions concrètes pour optimiser les projets soumis.
-    OBLIGATION : Termine TOUJOURS ton diagnostic par une section intitulée "AVIS & RECOMMANDATIONS D'EXPERT" contenant des conseils pratiques et stratégiques pour améliorer le projet.
-    RÈGLES DE FORMATAGE :
-    1. JAMAIS d'astérisques (*), de dièses (#) ou de tirets (-) en début de ligne.
-    2. Utilise UNIQUEMENT <strong></strong> pour mettre en avant des termes clés.
-    3. Double saut de ligne entre les paragraphes.
-    4. Ton : Professionnel, direct, expert.`,
-    temperature: 0.7,
-    topP: 0.95,
+    MISSION : Analyser, critiquer de manière constructive et apporter des solutions concrètes.
+    STYLE DE RÉDACTION (STYLE VOICEFLOW) :
+    1. Texte extrêmement aéré et moderne.
+    2. Paragraphes courts (2-3 phrases maximum).
+    3. Double saut de ligne obligatoire entre chaque paragraphe.
+    4. INTERDICTION ABSOLUE d'utiliser des astérisques (*), des dièses (#), des tirets (-) ou des caractères spéciaux pour le formatage.
+    5. Utilise UNIQUEMENT la balise HTML <strong></strong> pour souligner les points stratégiques.
+    6. Pas de listes à puces traditionnelles, utilise des paragraphes distincts.
+    7. Termine obligatoirement par une section intitulée : AVIS ET RECOMMANDATIONS DE L EXPERT.`,
+    temperature: 0.5,
+    topP: 0.9,
   };
 
   try {
@@ -116,5 +124,11 @@ export const askGeminiExpert = async (
 
 const cleanResponse = (text: string) => {
   if (!text) return "";
-  return text.replace(/\*/g, '').replace(/#/g, '').replace(/-/g, ' ');
+  // Nettoyage radical des marqueurs markdown et caractères spéciaux pour un style Voiceflow pur
+  return text
+    .replace(/\*/g, '')
+    .replace(/#/g, '')
+    .replace(/-/g, ' ')
+    .replace(/_{1,}/g, '')
+    .trim();
 };
